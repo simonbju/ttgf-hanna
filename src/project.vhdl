@@ -16,10 +16,21 @@ entity tt_um_example is
 end tt_um_example;
 
 architecture Behavioral of tt_um_example is
+    signal tal1 : unsigned(5 downto 0);
+    signal tal2 : unsigned(5 downto 0);
+    signal op : unsigned(1 downto 0);
+    signal res : unsigned(11 downto 0);
 begin
+    tal1 <= unsigned(ui_in(5 downto 0));
+    tal2 <= unsigned(uio_in(5 downto 0));
+    op <= unsigned(ui_in(7 downto 6));
 
-    uo_out <= std_logic_vector(unsigned(ui_in) + unsigned(uio_in));
-    uio_out <= "00000000";
-    uio_oe <= "00000000";
+    res <= "000000" & tal1 + tal2 when op = "00" 
+    else "000000" & tal1 - tal2 when op = "01"
+    else tal1 * tal2 when op = "10"
+    else "111111111111";
+    -- else tal1 / tal2;
+
+    uo_out <= "00" & std_logic_vector(res(5 downto 0));
 
 end Behavioral;
